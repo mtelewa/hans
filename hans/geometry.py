@@ -138,10 +138,10 @@ class GapHeight(VectorField):
             ymask = np.logical_and(yy > (Ly - wp) / 2., yy <= (Ly + wp) / 2.)
             xymask = np.logical_and(xmask, ymask)
 
-            xt1_mask = np.logical_and(xx > cp - tw, xx <= cp)
+            # xt1_mask = np.logical_and(xx > cp - tw, xx <= cp)
             xt2_mask = np.logical_and(xx > cp + lp, xx <= cp + lp + tw)
 
-            self.field[0, xt1_mask] += (xx[xt1_mask] - cp + tw) * hp / tw
+            # self.field[0, xt1_mask] += (xx[xt1_mask] - cp + tw) * hp / tw
             self.field[0, xt2_mask] += -(xx[xt2_mask] - cp - lp - tw) * hp / tw
 
             self.field[0, xymask] += hp
@@ -163,6 +163,68 @@ class GapHeight(VectorField):
             self.field[0] = h0 + amp * np.sin(- 4 * np.pi * (xx - Lx / 2) * num / Lx)**2
             mask = np.greater(xx, Lx / 2)
             self.field[0][mask] = h0
+
+        elif self.geometry["type"] == "dimple":
+            h0 = float(self.geometry['h0'])
+            a = float(self.geometry['a'])
+            b = float(self.geometry['b'])
+            cp = float(self.geometry['c'])
+
+            self.field[0] = h0 + np.nan_to_num(np.sqrt( b**2 - ((xx - cp - a)**2 * b**2 / a**2) ))
+
+        elif self.geometry["type"] == "orifice":
+            h1 = self.geometry['h1']
+            h2 = self.geometry['h2']
+            ho = self.geometry['ho']
+            lo = self.geometry['lo']
+            co = self.geometry['c']
+            tw = self.geometry['t']
+            hp = self.geometry['hp']
+            cp = self.geometry['cp']
+            wp = self.geometry['w']
+            twp = self.geometry['tp']
+
+            self.field[0] = h1 + (h2 - h1) / (Lx) * xx
+
+            xmask = np.logical_and(xx > co, xx <= co + lo)
+            ymask = np.logical_and(yy > (Ly - wp) / 2., yy <= (Ly + wp) / 2.)
+            xymask = np.logical_and(xmask, ymask)
+
+            xmask2 = np.logical_and(xx > co + lo, xx <= co + lo + cp - twp)
+            xymask2 = np.logical_and(xmask2, ymask)
+
+            xt1_mask = np.logical_and(xx > co - tw, xx <= co)
+            xt2_mask = np.logical_and(xx > co + lo + cp - twp, xx <= co + lo + cp)
+
+            self.field[0, xt1_mask] -= (xx[xt1_mask] - co + tw) * ho / tw
+            self.field[0, xt2_mask] += (xx[xt2_mask] - co - lo - cp + twp) * -hp / twp + hp
+
+            self.field[0, xymask] -= ho
+            self.field[0, xymask2] += hp
+
+        elif self.geometry["type"] == "venturi":
+            h1 = self.geometry['h1']
+            h2 = self.geometry['h2']
+            hp = self.geometry['hp']
+            cp = self.geometry['c']
+            lp = self.geometry['l']
+            wp = self.geometry['w']
+            tw = self.geometry['t']
+            rw = self.geometry['r']
+
+            self.field[0] = h1 + (h2 - h1) / (Lx) * xx
+
+            xmask = np.logical_and(xx > cp, xx <= cp + lp)
+            ymask = np.logical_and(yy > (Ly - wp) / 2., yy <= (Ly + wp) / 2.)
+            xymask = np.logical_and(xmask, ymask)
+
+            xt1_mask = np.logical_and(xx > cp - rw, xx <= cp)
+            xt2_mask = np.logical_and(xx > cp + lp, xx <= cp + lp + tw)
+
+            self.field[0, xt1_mask] += (xx[xt1_mask] - cp + rw) * hp / rw
+            self.field[0, xt2_mask] -= (xx[xt2_mask] - cp - lp - tw) * hp / tw
+
+            self.field[0, xymask] += hp
 
     def add_roughness_from_file(self):
 
