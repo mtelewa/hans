@@ -237,30 +237,30 @@ class Input:
         elif geometry["type"] in ["inclined", "inclined_x", "inclined_y"]:
             geometry["h1"] = float(geometry['h1'])
             geometry["h2"] = float(geometry['h2'])
-        elif self.geometry["type"] in ["inclined_pocket", "venturi"]:
-            self.geometry["h1"] = float(self.geometry['h1'])
-            self.geometry["h2"] = float(self.geometry['h2'])
-            self.geometry["hp"] = float(self.geometry['hp'])
-            self.geometry["c"] = float(self.geometry['c'])
-            self.geometry["l"] = float(self.geometry['l'])
-            self.geometry["w"] = float(self.geometry['w'])
+        elif geometry["type"] in ["inclined_pocket", "venturi"]:
+            geometry["h1"] = float(geometry['h1'])
+            geometry["h2"] = float(geometry['h2'])
+            geometry["hp"] = float(geometry['hp'])
+            geometry["c"] = float(geometry['c'])
+            geometry["l"] = float(geometry['l'])
+            geometry["w"] = float(geometry['w'])
 
             try:
-                self.geometry["t"] = float(self.geometry["t"])
+                geometry["t"] = float(geometry["t"])
             except KeyError:
-                self.geometry["t"] = 0.
+                geometry["t"] = 0.
 
             try:
-                self.geometry["r"] = float(self.geometry["r"])
+                geometry["r"] = float(geometry["r"])
             except KeyError:
-                self.geometry["r"] = 0.
+                geometry["r"] = 0.
 
             try:
-                if self.geometry["type"] != ["venturi"]:
-                    assert 1 * self.geometry["t"] + self.geometry["l"] + self.geometry["c"] <= self.disc["Lx"]
+                if geometry["type"] != ["venturi"]:
+                    assert 1 * geometry["t"] + geometry["l"] + geometry["c"] <= disc["Lx"]
                 else:
-                    assert self.geometry["r"] + self.geometry["t"] + self.geometry["l"] + self.geometry["c"] <= self.disc["Lx"]
-                assert self.geometry["w"] <= self.disc["Ly"]
+                    assert geometry["r"] + geometry["t"] + geometry["l"] + geometry["c"] <= disc["Lx"]
+                assert geometry["w"] <= disc["Ly"]
             except AssertionError:
                 print("Size of the pocket is larger than the domain. Abort.")
                 abort()
@@ -271,23 +271,23 @@ class Input:
             geometry["amp"] = float(geometry['amp'])
             geometry["num"] = float(geometry['num'])
 
-        elif self.geometry["type"] == "dimple":
-            self.geometry["h0"] = float(self.geometry['h0'])
-            self.geometry["a"] = float(self.geometry['a'])
-            self.geometry["b"] = float(self.geometry['b'])
-            self.geometry["c"] = float(self.geometry['c'])
+        elif geometry["type"] == "dimple":
+            geometry["h0"] = float(geometry['h0'])
+            geometry["a"] = float(geometry['a'])
+            geometry["b"] = float(geometry['b'])
+            geometry["c"] = float(geometry['c'])
 
-        elif self.geometry["type"] == "orifice":
-            self.geometry["h1"] = float(self.geometry['h1'])
-            self.geometry["h2"] = float(self.geometry['h2'])
-            self.geometry["hp"] = float(self.geometry['hp'])
-            self.geometry["ho"] = float(self.geometry['ho'])
-            self.geometry["lo"] = float(self.geometry['lo'])
-            self.geometry["c"] = float(self.geometry['c'])
-            self.geometry["cp"] = float(self.geometry['cp'])
-            self.geometry["w"] = float(self.geometry['w'])
-            self.geometry["t"] = float(self.geometry['t'])
-            self.geometry["tp"] = float(self.geometry['tp'])
+        elif geometry["type"] == "orifice":
+            geometry["h1"] = float(geometry['h1'])
+            geometry["h2"] = float(geometry['h2'])
+            geometry["hp"] = float(geometry['hp'])
+            geometry["ho"] = float(geometry['ho'])
+            geometry["lo"] = float(geometry['lo'])
+            geometry["c"] = float(geometry['c'])
+            geometry["cp"] = float(geometry['cp'])
+            geometry["w"] = float(geometry['w'])
+            geometry["t"] = float(geometry['t'])
+            geometry["tp"] = float(geometry['tp'])
 
         else:
             print(f"'{geometry['type']}' geometry not implemented")
