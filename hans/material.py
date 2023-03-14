@@ -107,7 +107,13 @@ class Material:
             c = self.material['c']
             d = self.material['d']
 
-            return a * rho**3 + b * rho**2 + c * rho + d
+            p = a * rho**3 + b * rho**2 + c * rho + d
+            if 'Pcav' in self.material.keys():
+                Pcav = self.material['Pcav']
+                return np.maximum(p, Pcav)
+            else:
+                return p
+
 
         # Cavitation model Bayada and Chupin, J. Trib. 135, 2013
         elif self.material['EOS'].startswith("Bayada"):
