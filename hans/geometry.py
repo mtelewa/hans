@@ -224,7 +224,7 @@ class GapHeight(VectorField):
             self.field[0, xt1_mask] += (xx[xt1_mask] - cp + rw) * hp / rw
             self.field[0, xt2_mask] -= (xx[xt2_mask] - cp - lp - tw) * hp / tw
 
-            self.field[0, xymask] += hp
+            self.field[0, xymask] -= hp
 
     def add_roughness_from_file(self):
 
