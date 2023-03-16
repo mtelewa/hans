@@ -222,7 +222,7 @@ class GapHeight(VectorField):
             xt2_mask = np.logical_and(xx > cp + lp, xx <= cp + lp + tw)
 
             self.field[0, xt1_mask] += (xx[xt1_mask] - cp + rw) * hp / rw
-            self.field[0, xt2_mask] -= (xx[xt2_mask] - cp - lp - tw) * hp / tw
+            self.field[0, xt2_mask] += (xx[xt2_mask] - cp - lp - tw) * hp / tw
 
             self.field[0, xymask] -= hp
 
